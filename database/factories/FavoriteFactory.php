@@ -17,19 +17,10 @@ class FavoriteFactory extends Factory
     public function definition(): array
     {
         return [
-            $users = User::all();
-    $recipes = Recipe::all();
-
-    foreach ($users as $user) {
-        $randomRecipes = $recipes->random(3);
-
-        foreach ($randomRecipes as $recipe) {
-            Favorite::create([
-                'user_id' => $user->id,
-                'recipe_id' => $recipe->id,
-            ]);
-        }
-    }
+            'user_id' => \App\Models\User::inRandomOrder()->first()?->id ?? \App\Models\User::factory(),
+            'recipe_id' => \App\Models\Recipe::inRandomOrder()->first()?->id ?? \App\Models\Recipe::factory(),
+            'created_at' => now(),
+            'updated_at' => now(),
         ];
     }
 }
