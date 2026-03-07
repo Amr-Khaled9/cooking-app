@@ -21,6 +21,8 @@ return new class extends Migration
                 ->cascadeOnDelete();
 
             $table->primary(['user_id', 'recipe_id']);
+
+            $table->timestamps();
         });
     }
 

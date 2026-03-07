@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use GMP;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class favorite extends Model
+class Favorite extends Model
 {
+    use HasFactory;
     protected $guarded = [];
 
     public function user()
