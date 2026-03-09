@@ -1,0 +1,83 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Requests\RecipeStoreRequest;
+use App\Http\Requests\RecipeUpdateRequest;
+use App\Models\Recipe;
+use App\Traits\ApiResponse;
+use Illuminate\Http\Request;
+
+class RecipeController extends Controller
+{
+    use ApiResponse;
+
+    public function index()
+    {
+        //
+    }
+
+    public function store(RecipeStoreRequest $request)
+    {
+        $data = $request->validated();
+
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
+            $imagePath = $request->file('image')->store('recipes', 'public');
+            $data['image'] = $imagePath;
+        }
+
+        $recipe = Recipe::create($data);
+
+        if (isset($data['image'])) {
+            $recipe->image_url = asset('storage/' . $data['image']);
+        }
+
+        return $this->success($recipe, 'Recipe created successfully', 201);
+    }
+
+
+    public function show(string $id)
+    {
+        $recipe = Recipe::find($id);
+
+        if (!$recipe) {
+            return $this->error('Recipe not found', 404);
+        }
+
+        return $this->success($recipe, 'Recipe retrieved successfully');
+    }
+
+    public function update(RecipeUpdateRequest $request, string $id)
+    {
+        $recipe = Recipe::find($id);
+
+        if (!$recipe) {
+            return $this->error('Recipe not found', 404);
+        }
+
+        $data = $request->validated();
+
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('recipes', 'public');
+            $data['image'] = $imagePath;
+        }
+
+        $recipe->update($data);
+
+        return $this->success($recipe, 'Recipe updated successfully');
+    }
+
+
+    public function destroy(string $id)
+    {
+        $recipe = Recipe::find($id);
+
+        if (!$recipe) {
+            return $this->error('Recipe not found', 404);
+        }
+
+        $recipe->delete();
+
+        return $this->success(null, 'Recipe deleted successfully');
+    }
+}
