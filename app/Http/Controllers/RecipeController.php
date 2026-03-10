@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\RecipeStoreRequest;
 use App\Http\Requests\RecipeUpdateRequest;
+use App\Http\Resources\RecipeResource;
 use App\Models\Recipe;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
@@ -14,7 +15,12 @@ class RecipeController extends Controller
 
     public function index()
     {
-        //
+        $recipes = Recipe::query()
+            ->with(['user:id,name', 'category:id,name'])
+            ->withCount(['ratings', 'favoritedBy'])
+            ->paginate(20);
+
+        return RecipeResource::collection($recipes);
     }
 
     public function store(RecipeStoreRequest $request)

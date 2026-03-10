@@ -22,7 +22,6 @@ class RatingSeeder extends Seeder
             $user = $users->random();
             $recipe = $recipes->random();
 
-            // تأكد من مفيش تقييم مكرر لنفس المستخدم ونفس الوصفة
             if (!Rating::where('user_id', $user->id)->where('recipe_id', $recipe->id)->exists()) {
                 Rating::create([
                     'user_id' => $user->id,
