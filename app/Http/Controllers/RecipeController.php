@@ -61,6 +61,11 @@ class RecipeController extends Controller
             return $this->error('Recipe not found', 404);
         }
 
+        // Authorization
+        if ($recipe->user_id !== auth()->id()) {
+            return $this->error('Not allowed to update this recipe', 403);
+        }
+
         $data = $request->validated();
 
         if ($request->hasFile('image')) {
@@ -80,6 +85,11 @@ class RecipeController extends Controller
 
         if (!$recipe) {
             return $this->error('Recipe not found', 404);
+        }
+
+        // Authorization
+        if ($recipe->user_id !== auth()->id()) {
+            return $this->error('Not allowed to update this recipe', 403);
         }
 
         $recipe->delete();
