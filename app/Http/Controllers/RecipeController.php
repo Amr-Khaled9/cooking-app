@@ -13,12 +13,17 @@ class RecipeController extends Controller
 {
     use ApiResponse;
 
-    public function index()
+    public function index(Request $request)
     {
-        $recipes = Recipe::query()
+        $query = Recipe::query()
             ->with(['user:id,name', 'category:id,name'])
-            ->withCount(['ratings', 'favoritedBy'])
-            ->paginate(20);
+            ->withCount(['ratings', 'favoritedBy']);
+
+        if ($request->has('category')) {
+            $query->where('category_id', $request->category);
+        }
+
+        $recipes = $query->paginate(20);
 
         return RecipeResource::collection($recipes);
     }
