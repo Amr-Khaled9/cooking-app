@@ -22,7 +22,9 @@ class RecipeController extends Controller
         if ($request->has('category')) {
             $query->where('category_id', $request->category);
         }
-
+        if ($request->has('rating')) {
+            $query->orderByDesc('ratings_count');
+        }
         $recipes = $query->paginate(20);
 
         return RecipeResource::collection($recipes);
