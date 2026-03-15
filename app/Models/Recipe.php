@@ -29,4 +29,14 @@ class Recipe extends Model
     {
         return $this->belongsToMany(User::class, 'favorites');
     }
+
+    public function getAverageRatingAttribute()
+    {
+        return $this->ratings()->avg('rating') ?? 0;
+    }
+
+    public function getRatingsCountAttribute()
+    {
+        return $this->ratings()->count();
+    }
 }
