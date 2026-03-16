@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\RecipeController;
 use Illuminate\Http\Request;
@@ -21,6 +22,9 @@ Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logo
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::resource('recipes', RecipeController::class);
+    Route::get('my-favorite', [FavoriteController::class, 'index']);
+    Route::post('my-favorite/create', [FavoriteController::class, 'insert']);
+    Route::delete('my-favorite/delete/{id}', [FavoriteController::class, 'delete']);
 });
 
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
