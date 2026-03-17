@@ -25,6 +25,9 @@ class RecipeController extends Controller
         if ($request->has('rating')) {
             $query->orderByDesc('ratings_count');
         }
+        if($request->has('search')){
+            $query->where('title', 'like', '%' . $request->search . '%');
+        }
         $recipes = $query->paginate(20);
 
         return RecipeResource::collection($recipes);
