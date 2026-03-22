@@ -25,9 +25,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('my-favorite', [FavoriteController::class, 'index']);
     Route::post('my-favorite/create', [FavoriteController::class, 'insert']);
     Route::delete('my-favorite/delete/{id}', [FavoriteController::class, 'delete']);
+        Route::apiResource('categories', CategoryController::class);
+
 });
 
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
-    Route::apiResource('categories', CategoryController::class);
+    // Route::apiResource('categories', CategoryController::class);
     Route::post('/recipes/{recipe}/rate', [RatingController::class, 'rate']);
 });
